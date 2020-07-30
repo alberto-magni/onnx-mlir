@@ -1,0 +1,14 @@
+cmake_minimum_required (VERSION 3.0) 
+
+project(protobuf-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(protobuf
+  URL           https://github.com/protocolbuffers/protobuf/releases/download/v3.11.0/protobuf-cpp-3.11.0.tar.gz 
+  URL_HASH      SHA256=5abfd5bf11dc0a14bb2303883fa76ecde48a4b447eb2f9f90b84592ce8b8707c
+  SOURCE_SUBDIR cmake
+  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j @NPROC@
+  CMAKE_ARGS    -DCMAKE_INSTALL_PREFIX=@EXT_INSTALL_DIR@ 
+                -DBUILD_SHARED_LIBS=OFF
+                -Dprotobuf_BUILD_TESTS=OFF
+)

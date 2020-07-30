@@ -26,6 +26,18 @@ if (MSVC)
   # like onnx
   set(CMAKE_CXX_FLAGS "-wd4244 -wd4267 -wd4530 -wd4624")
 endif()
+include(ProcessorCount)
+ProcessorCount(NPROC)
+
+set(EXT_INSTALL_DIR ${PROJECT_BINARY_DIR}/install)
+
+include(cmake/DownloadAndBuild.cmake)
+download_and_build(protobuf cmake/protobuf-download.txt.in)
+
+# Setting this variable is needed to import the function protobuf_generate_cpp.
+set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "" FORCE)
+find_package(Protobuf REQUIRED PATHS ${EXT_INSTALL_DIR} NO_DEFAULT_PATH)
+
 add_subdirectory(third_party/onnx)
 add_subdirectory(third_party/benchmark)
 add_subdirectory(third_party/pybind11)

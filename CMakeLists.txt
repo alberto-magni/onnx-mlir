@@ -18,14 +18,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-include(CTest)
-include(MLIR.cmake)
-
-if (MSVC)
-  # Disable warnings that prevent building of dependencies
-  # like onnx
-  set(CMAKE_CXX_FLAGS "-wd4244 -wd4267 -wd4530 -wd4624")
-endif()
 include(ProcessorCount)
 ProcessorCount(NPROC)
 
@@ -34,9 +26,18 @@ set(EXT_INSTALL_DIR ${PROJECT_BINARY_DIR}/install)
 include(cmake/DownloadAndBuild.cmake)
 download_and_build(protobuf cmake/protobuf-download.txt.in)
 
-# Setting this variable is needed to import the function protobuf_generate_cpp.
-set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "" FORCE)
+include(CTest)
+include(MLIR.cmake)
+
+## Setting this variable is needed to import the function protobuf_generate_cpp.
+#set(protobuf_MODULE_COMPATIBLE ON CACHE BOOL "" FORCE)
 find_package(Protobuf REQUIRED PATHS ${EXT_INSTALL_DIR} NO_DEFAULT_PATH)
+
+if (MSVC)
+  # Disable warnings that prevent building of dependencies
+  # like onnx
+  set(CMAKE_CXX_FLAGS "-wd4244 -wd4267 -wd4530 -wd4624")
+endif()
 
 add_subdirectory(third_party/onnx)
 add_subdirectory(third_party/benchmark)

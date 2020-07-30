@@ -8,7 +8,8 @@ if(DEFINED ENV{LLVM_PROJ_SRC})
             ${LLVM_PROJ_SRC})
   endif()
 else()
-  message(FATAL_ERROR "env variable LLVM_PROJ_SRC not set")
+  download_and_build(llvm-project cmake/llvm-project-download.txt.in)
+  set(LLVM_PROJ_SRC ${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm-project-prefix/src/llvm-project)
 endif()
 
 # Path to LLVM build folder
@@ -21,7 +22,7 @@ if(DEFINED ENV{LLVM_PROJ_BUILD})
             ${LLVM_PROJ_BUILD})
   endif()
 else()
-  message(FATAL_ERROR "env variable LLVM_PROJ_BUILD not set")
+  set(LLVM_PROJ_BUILD ${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm-project-prefix/src/llvm-project-build)
 endif()
 
 # LLVM project lib folder
